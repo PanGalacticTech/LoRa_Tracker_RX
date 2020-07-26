@@ -88,21 +88,31 @@ void setup() {
   while (!Serial);
 
   Serial.println("LoRa Receiver");
-  Serial.printf("Rx Frequency: %i Hz", rxHz);
-  Serial.println(" ");
+
+  delay(300);
 
   //setup LoRa transceiver module
   LoRa.setPins(ss, rst, dio0);
 
+  delay(300);
 
-  //  if (!LoRa.begin(434.5E6)) {
   if (!LoRa.begin(rxHz)) {
+    //while (!LoRa.begin(rxHz)){
+    //   delay(1000);
     Serial.println("Starting LoRa failed!");
     delay(5000);
+    Serial.print("...");
+    delay(1000);
+    Serial.println("Restarting");
     ESP.restart();
-
-    while (1);
+    // while (1);
   }
+
+  Serial.printf("Rx Frequency: %i Hz", rxHz);
+  Serial.println(" ");
+
+setOLED(); 
+ oledUpdate();  
 
 }
 
@@ -182,7 +192,14 @@ void wipePacket() {
 
   */
 
-  rxPacket[0] = '\n';
+int stringLength;
 
+stringLength = sizeof(rxPacket);
+
+ // Serial.println(stringLength);
+
+  for (int i = 0; i < stringLength; i++) {
+    rxPacket[i] = '\n';
+  }
 
 }
