@@ -73,53 +73,33 @@ long rxHz;                          // Rx Frequency in Hz
 
 long MHz = 1000000;                    // conversion from Hz to MHz
 
+
+
+
+
+
 void setup() {
 
   Serial.begin(115200);                        //initialize Serial Monitor
 
+
   Serial.println("Setting up OLED");
+
   OLEDsetupSimple();
 
-  rxHz = rxFrequency * MHz;
+  loraSetup();
 
 
+  sprintf(screenBuffer[0] , "%s", loraHeading );     // Print the heading to the screen
 
-
-  while (!Serial);
-
-  Serial.println("LoRa Receiver");
-
-  delay(300);
-
-  //setup LoRa transceiver module
-  LoRa.setPins(ss, rst, dio0);
-
-  delay(300);
-
-  if (!LoRa.begin(rxHz)) {
-    //while (!LoRa.begin(rxHz)){
-    //   delay(1000);
-    Serial.println("Starting LoRa failed!");
-    delay(5000);
-    Serial.print("...");
-    delay(1000);
-    Serial.println("Restarting");
-    ESP.restart();
-    // while (1);
-  }
-
-  Serial.printf("Rx Frequency: %i Hz", rxHz);
-  Serial.println(" ");
-
-  sprintf(screenBuffer[0] , "%s", loraHeading );     // %s string of characters
-  oledUpdate();
+  oledUpdate();                                   // Update OLED from buffers
 
 }
 
 
 int16_t lastRSSI;
 
-char rxPacket[64];
+char rxPacket[64];                  /// string to hold received packets
 
 
 uint16_t packetSinceOn = 0;  // counts number of received packets since switch on
@@ -128,49 +108,20 @@ uint16_t rxPacketNumber = 0;  // counts number of received packets with no packe
 
 uint16_t txPacketNumber;     // variable to hold the parsed packet ID number from the transmitter.
 
+bool receivedPacket = false;
+
 
 
 void loop() {
 
-  dataExtract();
+  loraParsePacket();
 
+  if (receivedPacket) {
+    dataExtract();
 
+    setOLED();
 
-
-  // setOLED();
-
-
-
-  //  oledUpdate();
-
-}
-
-
-
-void wipePacket() {
-
-  /*  // IF ABOVE STCOPY does not terminate correctly, use something like this
-       if (characterInput == '\n')
-     {
-         theString[counter] = '\0';  // terminate input string
-
-
-    OR
-
-         size_t len = strlen(myString)
-         memset (myString, 0,len);
-
-
-  */
-
-  int stringLength;
-
-  stringLength = sizeof(rxPacket);
-
-  // Serial.println(stringLength);
-
-  for (int i = 0; i < stringLength; i++) {
-    rxPacket[i] = '\n';
+    oledUpdate();
   }
 
 }

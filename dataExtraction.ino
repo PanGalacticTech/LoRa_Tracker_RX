@@ -8,19 +8,40 @@
 
 // Variables
 
-char callSign[] = {"SKY1"};
+char rxCallSign[] = {"SKY1"};
 
 
 
 
-char rxCallSign[12];   //
-char GPSlatitude[12];
-char GPSlongitude[12];
+char txCallSign[12];   //
+char packetChar[8];
+char GPSlatitude[16];
+char GPSlongitude[16];
 char GPSaltitude[12];
 char GPSspeed[12];
-char packetChar[12];
 
-char *dataArray[7] = {rxCallSign, packetChar, GPSlatitude, GPSlongitude, GPSaltitude, GPSspeed};
+
+char *dataArray[7] = {txCallSign, packetChar, GPSlatitude, GPSlongitude, GPSaltitude, GPSspeed};
+
+
+char callsignName[] = {"Callsign: "};
+char packetName[] = {"Packet ID: "};
+char latitudeName[] = {"Latitude: "};
+char longitudeName[] = {"Longitude: "};
+char gpsAltitudeName[] = {"GPS Altitude:"};
+char gpsSpeedName[] = {"Speed: "};
+
+char *dataNames[] = {callsignName, packetName, latitudeName, longitudeName, gpsAltitudeName, gpsSpeedName};                //"Packet ID"
+
+
+char callsignUnit[] = {" "};
+char packetUnit[] = {" "};
+char latitudeUnit[] = {" "};
+char longitudeUnit[] = {" "};
+char altitudeUnit[] = {"m"};
+char speedUnit[] = {"m/s"};
+
+char *dataUnits[] = {callsignUnit, packetUnit, latitudeUnit, longitudeUnit, altitudeUnit, speedUnit};
 
 
 
@@ -47,24 +68,36 @@ char exampleString[] = {"SKY1,42,55.8990,-3.2543,183.4,0.5741"};
 */
 //
 
+
+
 int dataExtract() {
 
-  char * pointer;
+  if (receivedPacket) {
 
-  Serial.println(exampleString);
-  delay(1000);
+    char * token;
 
-  pointer = strtok(exampleString, ",");
-  int i=0;
-  while (pointer != NULL) {
-        printf("%s\n", pointer);
-    pointer = strtok(NULL, ",");
-    i++;
+    Serial.println(rxPacket);
+   // delay(1000);
+
+    token = strtok(rxPacket, ",");
+    int i = 0;
+
+    while (token != NULL) {
+      //   printf("%s\n", token);    // Just prints out data not needed
+      dataArray[i] = token;
+      token = strtok(NULL, ",");
+      i++;
+    }
+
+
+    for (int j = 0; j < 6; j++) {
+      Serial.printf("%-15s %s", dataNames[j], dataArray[j]);
+      Serial.println(" ");
+      Serial.println(" ");
+    }
+
   }
-  return 0;
+  receivedPacket = false;
+ // return 0;
 
-  delay(4000);
-  for (int j=0;i < 6; j++){
-  Serial.println(dataArray[j]);
-  }
 }

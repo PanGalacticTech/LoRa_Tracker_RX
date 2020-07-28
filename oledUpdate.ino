@@ -39,7 +39,6 @@ void oledUpdate() {                                               // Function th
 
 
 
-int i = 3;     // variable for line number to print to. Starts at 3, ends at 8
 
 
 void setOLED() {                    // Writes Data & Text to Oled Screen Buffer
@@ -51,13 +50,16 @@ void setOLED() {                    // Writes Data & Text to Oled Screen Buffer
   sprintf(screenBuffer[1] , "Rx Frq: %.3f MHz", rxFrequency);
   sprintf(screenBuffer[2] , "RSSI: %i", lastRSSI);
 
-  sprintf(screenBuffer[i] , "%s", rxPacket);   // This just prints the entire RX packet. We need to add a function to extract the data from this packet.
+  // sprintf(screenBuffer[3] , "%s", rxPacket);
 
 
-  i++;
-  if (i >= 8) {
-    i = 3;
-  }
+  sprintf(screenBuffer[3], "%15-s %s", dataNames[0], dataArray[0]);
+  sprintf(screenBuffer[4], "%15-s %s", dataNames[1], dataArray[1]);
+  sprintf(screenBuffer[5], "%15-s %s", dataNames[2], dataArray[2]);
+  sprintf(screenBuffer[6], "%15-s %s", dataNames[3], dataArray[3]);
+  sprintf(screenBuffer[7], "%15-s %s", dataNames[4], dataArray[4]);
+ // sprintf(screenBuffer[8], "%-s %s", dataNames[5], dataArray[5]);
+
 
 
 }

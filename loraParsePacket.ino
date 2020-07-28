@@ -11,6 +11,8 @@ void loraParsePacket() {
 
     Serial.printf("%i Received packet | ", packetSinceOn);
 
+    receivedPacket = true;
+
     char rxBuffer[64];
     int j = 0;                                                  // variable to advancing char array
 
@@ -32,13 +34,46 @@ void loraParsePacket() {
     Serial.printf(" | with RSSI: %i   chain number: %i", lastRSSI, rxPacketNumber );
     Serial.println(" ");
 
-    wipePacket();
+ //   wipePacket();
 
     strcpy(rxPacket,  rxBuffer);    // copy the rxBuffer into the packet array
 
 
     // Function here updated the values printed to the OLED. going to be done elsewhere now.
 
+  }
+
+}
+
+
+
+
+// Function to "clean" data packet ready for next message
+
+void wipePacket() {
+
+  /*  // IF ABOVE STCOPY does not terminate correctly, use something like this
+       if (characterInput == '\n')
+     {
+         theString[counter] = '\0';  // terminate input string
+
+
+    OR
+
+         size_t len = strlen(myString)
+         memset (myString, 0,len);
+
+
+  */
+
+  int stringLength;
+
+  stringLength = sizeof(rxPacket);
+
+  // Serial.println(stringLength);
+
+  for (int i = 0; i < stringLength; i++) {
+    rxPacket[i] = '\n';
   }
 
 }
