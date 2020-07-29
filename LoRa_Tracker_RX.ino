@@ -99,7 +99,7 @@ void setup() {
 
 int16_t lastRSSI;
 
-char rxPacket[64];                  /// string to hold received packets
+char rxPacket[65];                  /// string to hold received packets
 
 
 uint16_t packetSinceOn = 0;  // counts number of received packets since switch on

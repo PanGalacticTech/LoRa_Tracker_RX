@@ -24,7 +24,7 @@ void loraParsePacket() {
       j++;                                                    // Advance array pointer
     }
 
-    rxBuffer[j] = '\n';   // Terminate the rxBuffer string
+ //   rxBuffer[j] = '\n';   // Terminate the rxBuffer string
 
 
     lastRSSI = LoRa.packetRssi();                              // Save the RSSI of last recieved packet
@@ -34,12 +34,13 @@ void loraParsePacket() {
     Serial.printf(" | with RSSI: %i   chain number: %i", lastRSSI, rxPacketNumber );
     Serial.println(" ");
 
- //   wipePacket();
+   wipePacket();
 
     strcpy(rxPacket,  rxBuffer);    // copy the rxBuffer into the packet array
 
 
-    // Function here updated the values printed to the OLED. going to be done elsewhere now.
+// Do CRC check here? How to deal with the checksum?
+
 
   }
 

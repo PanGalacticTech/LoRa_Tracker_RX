@@ -45,7 +45,7 @@ void setOLED() {                    // Writes Data & Text to Oled Screen Buffer
 
 
 
-  sprintf(screenBuffer[0] , "%s", loraHeading );     // %s string of characters
+  sprintf(screenBuffer[0] , "%-s  %s", loraHeading, txCallSign);     // %s string of characters
 
   sprintf(screenBuffer[1] , "Rx Frq: %.3f MHz", rxFrequency);
   sprintf(screenBuffer[2] , "RSSI: %i", lastRSSI);
@@ -53,11 +53,11 @@ void setOLED() {                    // Writes Data & Text to Oled Screen Buffer
   // sprintf(screenBuffer[3] , "%s", rxPacket);
 
 
-  sprintf(screenBuffer[3], "%15-s %s", dataNames[0], dataArray[0]);
-  sprintf(screenBuffer[4], "%15-s %s", dataNames[1], dataArray[1]);
-  sprintf(screenBuffer[5], "%15-s %s", dataNames[2], dataArray[2]);
-  sprintf(screenBuffer[6], "%15-s %s", dataNames[3], dataArray[3]);
-  sprintf(screenBuffer[7], "%15-s %s", dataNames[4], dataArray[4]);
+  sprintf(screenBuffer[3], "%10-s %s", dataNames[0], dataArray[0]);
+  sprintf(screenBuffer[4], "%10-s %s", dataNames[1], dataArray[1]);
+  sprintf(screenBuffer[5], "%10-s %s", dataNames[2], dataArray[2]);
+  sprintf(screenBuffer[6], "%10-s %s", dataNames[3], dataArray[3]);
+  sprintf(screenBuffer[7], "%10-s %s", dataNames[4], dataArray[4]);
  // sprintf(screenBuffer[8], "%-s %s", dataNames[5], dataArray[5]);
 
 
