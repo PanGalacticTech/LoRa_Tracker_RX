@@ -72,6 +72,7 @@ char exampleString[] = {"SKY1,42,55.8990,-3.2543,183.4,0.5741"};
 
 int txCheckSum;
 char checkSumChar;
+char checkSumString[16];
 
 int dataExtract() {
 
@@ -79,7 +80,7 @@ int dataExtract() {
 
   if (receivedPacket) {
 
-    byte checksum = CRC8(*rxPacket, sizeof(rxPacket));
+  //  byte checksum = CRC8(*rxPacket, sizeof(rxPacket));
 
     char * token;
 
@@ -103,38 +104,62 @@ int dataExtract() {
 
 
 
-/*
-    // checksum
-   int checksum = 0;                                                          // Reset checksum
+
+// Check Sum
+
+  byte crc = 0x00;       
+  
+    for (int j = 0; j < (i - 1) ; j++) {
+
+  byte sum = (crc ^ dataArray[j]) & 0x01; 
+
+Serial.printf("Byte Sum: %i", sum)
+Serial.println(" ");
+
+checkSumString[j] =  char(sum);
+      
+for (int k = 0; k < sizeof(checkSumString[j]), k++){
+ Serial.printf("checkSumString: %c", checkSumString[k]);
+}
+
+Serial.println(" ");
+
+ // Serial.printf("CheckSum: %a", checksum[i]);    
+
+    }
 
     /*
-        for (int j = 0; j < (i - 1) ; j++) {                           // for loop adds up received packets, i-1 as it need to ignore the final packet, the checksum
+        // checksum
+       int checksum = 0;                                                          // Reset checksum
 
-        //  txCheckSum = (txCheckSum + (uint32_t)dataArray[j]);
-      checkSumChar = (checkSumChar + (char)dataArray[j]);
+        /*
+            for (int j = 0; j < (i - 1) ; j++) {                           // for loop adds up received packets, i-1 as it need to ignore the final packet, the checksum
 
-        }
+            //  txCheckSum = (txCheckSum + (uint32_t)dataArray[j]);
+          checkSumChar = (checkSumChar + (char)dataArray[j]);
+
+            }
 
     */
     /*
-    for (int j = 0; j < (i - 1) ; j++) {
+      for (int j = 0; j < (i - 1) ; j++) {
       Serial.println((int)dataArray[j]);
-    //  Serial.println(char(dataArray[j]));
-      
+      //  Serial.println(char(dataArray[j]));
+
       checksum += (int)&dataArray[j];
       Serial.println(checksum);
-    }
+      }
 
-*/
+    */
 
 
-    
- //   Serial.println(" ...");
-//    byte ls8b = lowByte(checksum);
 
-  Serial.printf("CheckSum: %a", checksum);                           // At the moment just print the checksum and we can manually compare it to the printout from the next few lines
-    Serial.println(" ");
-   // Serial.printf("CheckSum ls8b: %i", ls8b);
+    //   Serial.println(" ...");
+    //    byte ls8b = lowByte(checksum);
+
+ //   Serial.printf("CheckSum: %a", checksum);                           // At the moment just print the checksum and we can manually compare it to the printout from the next few lines
+  //  Serial.println(" ");
+    // Serial.printf("CheckSum ls8b: %i", ls8b);
 
 
     Serial.println(" ");

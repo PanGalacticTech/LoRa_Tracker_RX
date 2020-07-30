@@ -1,11 +1,52 @@
 /*
     Learning About Checksum Functions
 
+  Implementing NMEA Checksum
+  
+*/
+
+
+
+
+
+int checksum(const char *s) {
+    int c = 0;
+
+    while (*s)
+        c ^= *s++;
+
+    return c;
+}
+
+
+/*
+int main()
+{
+    char mystring[] = "BNALF,1,1,0,,B,W,V,,220003,,0,0,VISUAL ALARM";
+
+    printf("String: %s\nChecksum: 0x%02X\n", mystring, checksum(mystring));
+
+    return 0;
+}
+    
 
 
 */
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// Implementing a CRC8 Checksum (?)
 
 //CRC8 - generates a checksum with a size of 8 bits (1byte)
 
