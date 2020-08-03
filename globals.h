@@ -2,6 +2,9 @@
 
 
 
+int minsSinceRX;
+
+
 // OLED Variables & Screen Buffers
 
 
@@ -47,4 +50,4 @@ char *PscreenBuffer[9] = {PoledLine0, PoledLine1, PoledLine2 , PoledLine3, Poled
 char lineWipe[23] = {"                     "};  // used to wipe old messages line by line
 
 
-char loraHeading[23] = {"LoRa Receiver"}; //
+char loraHeading[23] = {"LoRa Rx"}; //

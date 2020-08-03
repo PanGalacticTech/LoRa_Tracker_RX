@@ -51,6 +51,8 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <ledObject.h>
+#include <autoDelay.h>
 
 
 
@@ -73,6 +75,23 @@ long rxHz;                          // Rx Frequency in Hz
 
 long MHz = 1000000;                    // conversion from Hz to MHz
 
+unsigned long timeSinceRX;          // save the last time packet was received then once every minuite print time since last RX
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+//ledObject Constructor
+
+#define ledPin 26                         // Define LED pin. If undefined - defaults to pin 13.
+#define initialState 0                  // Defines if LED pin starts with initial state ON or OFF - defaults to OFF
+
+ledObject rxLED;                            // led object is going to be used to denote a transmitted message
+
+autoDelay animationDelay;
+
+
+
+
+
 
 
 
@@ -82,7 +101,7 @@ void setup() {
 
   Serial.begin(115200);                        //initialize Serial Monitor
 
-
+  rxLED.begin(ledPin, initialState);    // Begin ledObject library by passing the pin of an LED & the initialState
   Serial.println("Setting up OLED");
 
   OLEDsetupSimple();
@@ -95,6 +114,11 @@ void setup() {
   oledUpdate();                                   // Update OLED from buffers
 
 }
+
+
+
+
+
 
 
 int16_t lastRSSI;
@@ -118,10 +142,10 @@ void loop() {
 
   if (receivedPacket) {
     dataExtract();
-
     setOLED();
 
-    oledUpdate();
   }
-
+  timeSinceLast();                     // Debugging feature, prints to serial monitor if no packet RX within 1 minuite
+  oledUpdate();
+  rxLED.performBlink();
 }

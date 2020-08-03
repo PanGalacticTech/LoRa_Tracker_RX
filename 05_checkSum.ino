@@ -2,7 +2,7 @@
     Learning About Checksum Functions
 
   Implementing NMEA Checksum
-  
+
 */
 
 
@@ -10,34 +10,43 @@
 
 
 int checksum(const char *s) {
-    int c = 0;
+  int c = 0;
 
-    while (*s)
-        c ^= *s++;
+  while (*s)
+    c ^= *s++;
 
-    return c;
+  return c;
 }
 
 
 /*
-int main()
-{
+  int main()
+  {
     char mystring[] = "BNALF,1,1,0,,B,W,V,,220003,,0,0,VISUAL ALARM";
 
     printf("String: %s\nChecksum: 0x%02X\n", mystring, checksum(mystring));
 
     return 0;
-}
-    
+  }
+
 
 
 */
 
 
 
+int nmeaChecksum(char *nmea_data)
+{
+  int crc = 0;
+  int i;
 
-
-
+  // the first $ sign and the last two bytes of original CRC + the * sign
+  for (i = 1; i < strlen(nmea_data) - 3; i ++) {
+    crc ^= nmea_data[i];
+  }
+ // Serial.println(crc);
+  return crc;
+}
 
 
 
@@ -54,7 +63,7 @@ int main()
 //byte  CRC8(const byte *dataIn, byte dataLength) {                  // passed data string & data length
 
 byte  CRC8(byte *dataIn, byte dataLength) {                  // passed data string & data length
-  
+
 
   byte crc = 0x00;                                                    // initialise crc variable at zero
 
