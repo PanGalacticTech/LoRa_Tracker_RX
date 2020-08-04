@@ -16,7 +16,10 @@ void loraParsePacket() {
 
     packetSinceOn++;                                             // increments variable for total received packets since switch on
 
-    Serial.printf("%i Received packet | ", packetSinceOn);
+
+    if (verboseSerial) {
+      Serial.printf("%i Received packet | ", packetSinceOn);
+    }
 
     rxLED.callBlink();
 
@@ -35,7 +38,9 @@ void loraParsePacket() {
     while (LoRa.available()) {
       //   Serial.print((char)LoRa.read());                   // Simple old method
       rxBuffer[j] = (char(LoRa.read()));                    // better new method saves recieved packet as a char string
-      Serial.print(rxBuffer[j]);                                // Prints out the received string
+      if (verboseSerial) {
+        Serial.print(rxBuffer[j]);                                // Prints out the received string
+      }
       j++;                                                    // Advance array pointer
     }
 
@@ -44,19 +49,18 @@ void loraParsePacket() {
 
     lastRSSI = LoRa.packetRssi();                              // Save the RSSI of last recieved packet
 
-    //  rxPacketNumber++;
-    // print RSSI of packet
-    //    Serial.printf(" | with RSSI: %i   chain number: %i", lastRSSI, rxPacketNumber );
 
-    Serial.printf(" | with RSSI: %i", lastRSSI);
-    Serial.println(" ");
+    if (verboseSerial) {
+      Serial.printf(" | with RSSI: %i", lastRSSI);
+      Serial.println(" ");
+    }
 
     wipePacket();
 
     strcpy(rxPacket,  rxBuffer);    // copy the rxBuffer into the packet array
 
-    Serial.println(rxPacket);
-    // Do CRC check here? How to deal with the checksum?
+    //    Serial.println(rxPacket);   // Uncomment for debugging. Prints rxPacket including checksum
+
 
 
   }

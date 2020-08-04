@@ -44,7 +44,7 @@ int nmeaChecksum(char *nmea_data)
   for (i = 1; i < strlen(nmea_data) - 3; i ++) {
     crc ^= nmea_data[i];
   }
- // Serial.println(crc);
+  // Serial.println(crc);
   return crc;
 }
 

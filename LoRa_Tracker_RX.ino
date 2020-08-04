@@ -108,8 +108,13 @@ void setup() {
 
   loraSetup();
 
+  //Print Heading
+  // Heading
 
-  sprintf(screenBuffer[0] , "%s", loraHeading );     // Print the heading to the screen
+  sprintf(screenBuffer[0] , "%-10s %.3f MHz", loraHeading, rxFrequency);
+
+  sprintf(screenBuffer[1], "%-s%s %s%s", dataNames[0], dataArray[0], dataNames[1], dataArray[1]);
+
 
   oledUpdate();                                   // Update OLED from buffers
 
@@ -120,22 +125,6 @@ void setup() {
 
 
 
-
-int16_t lastRSSI;
-
-char rxPacket[65];                  /// string to hold received packets
-
-
-uint16_t packetSinceOn = 0;  // counts number of received packets since switch on
-
-uint16_t rxPacketNumber = 0;  // counts number of received packets with no packet losses
-
-uint16_t txPacketNumber;     // variable to hold the parsed packet ID number from the transmitter.
-
-bool receivedPacket = false;
-
-
-
 void loop() {
 
   loraParsePacket();
@@ -143,8 +132,8 @@ void loop() {
   if (receivedPacket) {
     dataExtract();
     setOLED();
-
   }
+  waitingAnimation();
   timeSinceLast();                     // Debugging feature, prints to serial monitor if no packet RX within 1 minuite
   oledUpdate();
   rxLED.performBlink();

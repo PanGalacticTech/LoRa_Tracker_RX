@@ -6,55 +6,6 @@
 */
 
 
-// Variables
-
-char rxCallSign[] = {"SKY1"};
-
-
-
-
-char txCallSign[5];   //0
-char packetChar[4];    //1
-char GPSlatitude[16];   //2
-char GPSlongitude[16]; //3
-char GPSaltitude[12];   //4
-char GPSspeed[12];      //5
-char GPSheading[12];    //6
-char checkSum[16];        //7
-
-
-char *dataArray[] = {txCallSign, packetChar, GPSlatitude, GPSlongitude, GPSaltitude, GPSspeed, GPSheading, checkSum};
-
-
-char callsignName[] = {"Callsign: "};
-char packetName[] = {"Packet ID: "};
-char latitudeName[] = {"Latitude: "};
-char longitudeName[] = {"Longitude: "};
-char gpsAltitudeName[] = {"GPS Altitude:"};
-char gpsSpeedName[] = {"Speed: "};
-char gpsHeadingName[] = {"Heading: "};
-char checksumName[] = {"CheckSum: "};
-
-char *dataNames[] = {callsignName, packetName, latitudeName, longitudeName, gpsAltitudeName, gpsSpeedName, gpsHeadingName, checksumName};                //"Packet ID"
-
-
-char callsignUnit[] = {" "};
-char packetUnit[] = {" "};
-char latitudeUnit[] = {" "};
-char longitudeUnit[] = {" "};
-char altitudeUnit[] = {"m"};
-char speedUnit[] = {"m/s"};
-char degreesUnit[] = {"Degrees"};
-char checksumUnit[] = {" "};
-
-char *dataUnits[] = {callsignUnit, packetUnit, latitudeUnit, longitudeUnit, altitudeUnit, speedUnit, degreesUnit };
-
-
-
-int packetID;                       // id number of transmitted packet.
-int previousPacketID;                 // last received packet ID, can be used to compare for dropped packets.
-
-char exampleString[] = {"SKY1,42,55.8990,-3.2543,183.4,0.5741"};
 
 
 //
@@ -80,6 +31,7 @@ int rxCheckSum;
 
 char *checkSumChar;
 
+bool checksumValid;
 
 
 // Function to extract useable data from the recieved string
@@ -108,14 +60,6 @@ int dataExtract() {
 
     }
 
-    Serial.println(" ");
-    Serial.print("rxPacket: ");
-    Serial.println(rxPacket);
-  //  Serial.println(" ");
-
- //   Serial.print("txCheckSum (char): ");
- //   Serial.println(checkSumChar);
-    Serial.println(" ");
 
 
 
@@ -123,22 +67,42 @@ int dataExtract() {
 
     txCheckSum = atoi(checkSumChar);
 
-    Serial.printf("Tx CheckSum: %i  ", txCheckSum);
+
 
     rxCheckSum = nmeaChecksum(rxPacket);                                  // run the rest of the rxPacket through NMEA checksum function to generate the checksum
 
-    Serial.printf("  Rx CheckSum: %i", rxCheckSum);
-
-    Serial.println(" ");
-
-    if (txCheckSum == rxCheckSum) {                  // If the checksums are equal
-
+    if (verboseSerial) {
       Serial.println(" ");
-      Serial.println("Checksum Valid!");
+      Serial.print("rxPacket: ");
+    }
 
+    Serial.print(rxPacket);                                        // This prints out the entire recieved string
+
+
+    if (verboseSerial) {
+      Serial.println(" ");
+      Serial.printf("Tx CheckSum: %i  ", txCheckSum);
+      Serial.printf("  Rx CheckSum: %i", rxCheckSum);
       Serial.println(" ");
     }
 
+    if (txCheckSum == rxCheckSum) {                  // If the checksums are equal
+      checksumValid = true;
+      Serial.println(",1");                                   // prints an extra data byte - 1 for valid checksum
+      if (verboseSerial) {
+        Serial.println("Checksum Valid!");
+        Serial.println(" ");
+      }
+
+    } else {
+      checksumValid = false;
+      Serial.println(",0");                                        //prints an extra databyte - 0 for invalid checksum
+      if (verboseSerial) {
+        Serial.println("CHECKSUM INVALID");
+        Serial.println(" ");
+      }
+
+    }
 
 
 
@@ -158,25 +122,27 @@ int dataExtract() {
       i++;
     }
 
-    Serial.printf("Received %i Data Points.", i);
-    Serial.println(" ");
-
-
-
-    for (int j = 0; j < i; j++) {
-      Serial.print(j);
-      Serial.printf("|  %-15s %s %s", dataNames[j], dataArray[j], dataUnits[j] );
+    if (verboseSerial) {
+      Serial.printf("Received %i Data Points.", i);
       Serial.println(" ");
+
+
+
+      for (int j = 0; j < i; j++) {
+        Serial.print(j);
+        Serial.printf("|  %-15s %s %s", dataNames[j], dataArray[j], dataUnits[j] );
+        Serial.println(" ");
+      }
     }
 
+    comparePacketNumbers();                                             // Checks for sequential TX packet numbers
 
-    comparePacketNumbers();
-
-    Serial.println("----------------------------------------------- ");     // End of RecievedPacket
-    Serial.println(" ");
-    Serial.println(" ");
-    Serial.println(" ");
-
+    if (verboseSerial) {
+      Serial.println("----------------------------------------------- ");     // End of RecievedPacket
+      Serial.println(" ");
+      Serial.println(" ");
+      Serial.println(" ");
+    }
   }
   receivedPacket = false;
   // return 0;

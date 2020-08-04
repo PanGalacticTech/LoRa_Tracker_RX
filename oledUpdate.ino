@@ -43,23 +43,47 @@ void oledUpdate() {                                               // Function th
 
 void setOLED() {                    // Writes Data & Text to Oled Screen Buffer
 
+  // Heading
+
+  // sprintf(screenBuffer[0] , "%-10s  RSSI: %i", loraHeading, lastRSSI);     // %s string of characters
+
+  sprintf(screenBuffer[0] , "%-9s %.3f MHz", loraHeading, rxFrequency);
+
+  sprintf(screenBuffer[1], "%-s %-6s %s 0%s", dataNames[0], dataArray[0], dataNames[1], dataArray[1]);
+
+  // Checksum
+  if (checksumValid) {
+    sprintf(screenBuffer[2], "%-4i   Checksum Valid", rxPacketNumber);
+  } else {
+    sprintf(screenBuffer[2], "     INVALID CHECKSUM");
+  }
+
+  // Data
+  sprintf(screenBuffer[3], "%-13s %6s", dataNames[2], dataArray[2]);     // Latitude
+
+  sprintf(screenBuffer[3], "%-13s %6s", dataNames[2], dataArray[2]);     // Latitude
+  sprintf(screenBuffer[4], "%-13s %6s", dataNames[3], dataArray[3]);     // Longitude
+  sprintf(screenBuffer[5], "%-14s %6s", dataNames[4], dataArray[4]);      // Altitude
+
+  sprintf(screenBuffer[6], "%-14s %6s", dataNames[5], dataArray[5]);       // Speed
+  sprintf(screenBuffer[7], "%-14s %6s", dataNames[6], dataArray[6]);       // Heading
+  // sprintf(screenBuffer[8], "%-s %s", dataNames[5], dataArray[5]);
+
+}
 
 
-  sprintf(screenBuffer[0] , "%-s  %s", loraHeading, txCallSign);     // %s string of characters
+void wipeOLED() {
 
-  sprintf(screenBuffer[1] , "Rx Frq: %.3f MHz", rxFrequency);
-  sprintf(screenBuffer[2] , "RSSI: %i", lastRSSI);
+  // sprintf(screenBuffer[0], "%22s", lineWipe);     // %s string of characters   // This line commented because we always want the header to print
+  //  sprintf(screenBuffer[1], "%22s", lineWipe);                                     // Including the frequency
+  sprintf(screenBuffer[2], "%22s", lineWipe);
+  sprintf(screenBuffer[3], "%22s", lineWipe);
+  sprintf(screenBuffer[4], "%22s", lineWipe);
+  sprintf(screenBuffer[5], "%22s", lineWipe);
+  sprintf(screenBuffer[6], "%22s", lineWipe);
+  sprintf(screenBuffer[7], "%22s", lineWipe);
 
-  // sprintf(screenBuffer[3] , "%s", rxPacket);
-
-
-  sprintf(screenBuffer[3], "%13-s %6s", dataNames[0], dataArray[0]);
-  sprintf(screenBuffer[4], "%13-s %6s", dataNames[1], dataArray[1]);
-  sprintf(screenBuffer[5], "%13-s %6s", dataNames[2], dataArray[2]);
-  sprintf(screenBuffer[6], "%13-s %6s", dataNames[3], dataArray[3]);
-  sprintf(screenBuffer[7], "%13-s %6s", dataNames[4], dataArray[4]);
- // sprintf(screenBuffer[8], "%-s %s", dataNames[5], dataArray[5]);
-
+  display.clearDisplay();
 
 
 }
