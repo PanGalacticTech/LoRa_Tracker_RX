@@ -1,6 +1,7 @@
 /*
     Learning About Checksum Functions
 
+<<<<<<< HEAD:05_checkSum.ino
   Implementing NMEA Checksum
 
 */
@@ -28,11 +29,15 @@ int checksum(const char *s) {
 
     return 0;
   }
+=======
+
+>>>>>>> parent of b20a8b4... did some stuff:checkSum.ino
 
 
 
 */
 
+<<<<<<< HEAD:05_checkSum.ino
 
 
 int nmeaChecksum(char *nmea_data)
@@ -57,6 +62,8 @@ int nmeaChecksum(char *nmea_data)
 
 // Implementing a CRC8 Checksum (?)
 
+=======
+>>>>>>> parent of b20a8b4... did some stuff:checkSum.ino
 //CRC8 - generates a checksum with a size of 8 bits (1byte)
 
 
