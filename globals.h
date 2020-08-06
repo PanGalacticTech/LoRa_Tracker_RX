@@ -1,78 +1,8 @@
 
 
-bool verboseSerial = true;    // enables Verbose serial output for debugging. Else just prints data.
+
 
 int minsSinceRX;
-
-
-
-
-
-int16_t lastRSSI;
-
-char rxPacket[65];                  /// string to hold received packets
-
-
-uint16_t packetSinceOn = 0;  // counts number of received packets since switch on
-
-uint16_t rxPacketNumber = 0;  // counts number of received packets with no packet losses
-
-uint16_t txPacketNumber;     // variable to hold the parsed packet ID number from the transmitter.
-
-bool receivedPacket = false;
-
-
-// Data Variables
-
-
-
-char rxCallSign[] = {"SKY1"};
-
-
-
-
-char txCallSign[5];   //0
-char packetChar[4];    //1
-char GPSlatitude[16];   //2
-char GPSlongitude[16]; //3
-char GPSaltitude[12];   //4
-char GPSspeed[12];      //5
-char GPSheading[12];    //6
-char checkSum[16];        //7
-
-
-char *dataArray[] = {txCallSign, packetChar, GPSlatitude, GPSlongitude, GPSaltitude, GPSspeed, GPSheading, checkSum};
-
-
-char callsignName[] = {"Call:"};
-char packetName[] = {"ID:"};
-char latitudeName[] = {"Lat: "};
-char longitudeName[] = {"Long: "};
-char gpsAltitudeName[] = {"Alt:"};
-char gpsSpeedName[] = {"Speed: "};
-char gpsHeadingName[] = {"Head: "};
-char checksumName[] = {"CheckSum: "};
-
-char *dataNames[] = {callsignName, packetName, latitudeName, longitudeName, gpsAltitudeName, gpsSpeedName, gpsHeadingName, checksumName};                //"Packet ID"
-
-
-char callsignUnit[] = {" "};
-char packetUnit[] = {" "};
-char latitudeUnit[] = {" "};
-char longitudeUnit[] = {" "};
-char altitudeUnit[] = {"m"};
-char speedUnit[] = {"m/s"};
-char degreesUnit[] = {"Degrees"};
-char checksumUnit[] = {" "};
-
-char *dataUnits[] = {callsignUnit, packetUnit, latitudeUnit, longitudeUnit, altitudeUnit, speedUnit, degreesUnit };
-
-
-
-int packetID;                       // id number of transmitted packet.
-int previousPacketID;                 // last received packet ID, can be used to compare for dropped packets.
-
-char exampleString[] = {"SKY1,42,55.8990,-3.2543,183.4,0.5741"};
 
 
 // OLED Variables & Screen Buffers
