@@ -127,7 +127,7 @@ void setup() {
 
 void loop() {
 
-  loraParsePacket();
+  loraParsePacket();   // Seems to be broken here
 
   if (receivedPacket) {
     dataExtract();
